@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เธอจะเป็นแฟนกับเราไหม?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Mitr', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ffdfdf, #ffe9f3, #ffd6e5);
+            color: #ff4d6d;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
+            padding: 40px;
+            max-width: 90%;
+            width: 500px;
+            position: relative;
+            z-index: 10;
+            transform: translateY(0);
+            transition: transform 0.5s, box-shadow 0.5s;
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.4);
+        }
+        
+        .hearts-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            font-size: 70px;
+            background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.3);
+            animation: heartbeat 1.5s infinite ease-in-out;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .heart::after {
+            content: '❤️';
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.5;
+            filter: blur(10px);
+            animation: heartglow 1.5s infinite alternate;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes heartglow {
+            0% { opacity: 0.3; filter: blur(5px); }
+            100% { opacity: 0.7; filter: blur(15px); }
+        }
+        
+        .message {
+            font-size: 28px;
+            margin: 30px 0;
+            font-weight: 400;
+            line-height: 1.4;
+            position: relative;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+        }
+        
+        .message::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 77, 109, 0.5), transparent);
+        }
+        
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            font-family: 'Mitr', sans-serif;
+            font-size: 20px;
+            padding: 12px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        .next {
+            background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
+            color: white;
+        }
+        
+        .next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+        
+        .yes {
+            background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
+            color: white;
+            font-size: 22px;
+            padding: 15px 40px;
+        }
+        
+        .yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.5);
+        }
+        
+        .no {
+            background: linear-gradient(45deg, #cccccc, #eeeeee);
+            color: #666;
+            transition: all 0.2s;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .floating {
+            position: absolute;
+            font-size: 30px;
+            animation: float 6s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes float {
+            from { 
+                transform: translateY(100vh) rotate(0deg); 
+                opacity: 1; 
+            }
+            to { 
+                transform: translateY(-10vh) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: confetti-fall 5s linear infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .success-message {
+            color: #ff4d6d;
+            text-align: center;
+            font-size: 40px;
+            text-shadow: 2px 2px 8px rgba(255, 77, 109, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .friendly-message {
+            color: #888;
+            text-align: center;
+            font-size: 30px;
+            margin-top: 20px;
+        }
+        
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .music-controls button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            padding: 0;
+            font-size: 16px;
+            background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-bg" id="hearts-background"></div>
+    
+    <div class="container">
+        <h1 class="heart">❤️</h1>
+        <p class="message" id="text">สวัสดีที่รัก วันนี้เค้ามีไรจะบอก...</p>
+        <div class="buttons">
+            <button class="next" onclick="nextMessage(1)">ถัดไป ➡️</button>
+        </div>
+    </div>
+    
+    <div class="music-controls">
+        <button onclick="toggleMusic()" id="musicToggle">▶️</button>
+        <span id="musicStatus" style="margin-left: 10px; font-size: 14px; color: #ff4d6d;">เปิดเพลง</span>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a119d167.mp3?filename=soft-piano-100-bpm-121529.mp3" type="audio/mpeg">
+        <!-- เพลงจาก Pixabay (ฟรี) -->
+    </audio>
+
+    <script>
+        let musicPlaying = false;
+        const music = document.getElementById('backgroundMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicStatus = document.getElementById('musicStatus');
+        
+        // เพลงจะไม่เล่นอัตโนมัติ เนื่องจากนโยบายเบราว์เซอร์
+        function toggleMusic() {
+            if (musicPlaying) {
+                music.pause();
+                musicToggle.innerHTML = '▶️';
+                musicStatus.innerHTML = 'เปิดเพลง';
+                musicPlaying = false;
+            } else {
+                music.play().catch(e => {
+                    console.log('ไม่สามารถเล่นเพลงได้:', e);
+                    alert('กรุณาคลิกที่ปุ่มเพื่อเล่นเพลง');
+                });
+                musicToggle.innerHTML = '⏸️';
+                musicStatus.innerHTML = 'หยุดเพลง';
+                musicPlaying = true; 
+            }
+        }
+        
+        // เพิ่มเพลงสำรองในกรณีที่ไม่สามารถโหลดเพลงแรกได้
+        music.addEventListener('error', function() {
+            music.src = 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ffee29.mp3?filename=romantic-valentine-114479.mp3';
+            console.log('กำลังใช้เพลงสำรอง');
+        });
+        
+        // เพิ่มหัวใจพื้นหลัง
+        function createBackgroundHearts() {
+            const heartsBackground = document.getElementById('hearts-background');
+            const heartSymbols = ['❤️', '💕', '💓', '💗', '💖'];
+            
+            for (let i = 0; i < 20; i++) {
+                let heart = document.createElement('div');
+                heart.classList.add('floating');
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.opacity = 0.2 + Math.random() * 0.3;
+                heart.style.fontSize = (20 + Math.random() * 20) + 'px';
+                heart.style.animationDuration = (7 + Math.random() * 15) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heartsBackground.appendChild(heart);
+            }
+        }
+        
+        createBackgroundHearts();
+        
+        let messages = [
+            "สวัสดีที่รัก วันนี้เค้ามีไรจะบอก...",
+            "เค้ารักเธอนะ ชอบเธอมากๆเลย 💖",
+            "เธอจะเป็นแฟนกับเราได้ไหม?"
+        ];
+        
+        let step = 0;
+
+        function nextMessage(nextStep) {
+            step = nextStep;
+            let text = document.getElementById("text");
+            text.style.opacity = 0;
+            
+            setTimeout(() => {
+                text.innerHTML = messages[step];
+                text.style.opacity = 1;
+                
+                if (step === 2) {
+                    document.querySelector(".buttons").innerHTML = `
+                        <button class="yes" onclick="sayYes()">ตกลง 💖</button>
+                        <button class="no" id="noButton" onmouseover="moveButton()">ไม่ตกลง 😢</button>
+                    `;
+                } else {
+                    document.querySelector(".buttons").innerHTML = `
+                        <button class="next" onclick="nextMessage(${step + 1})">ถัดไป ➡️</button>
+                    `;
+                }
+            }, 300);
+        }
+
+        // ฟังก์ชั่นทำให้ปุ่ม No เคลื่อนที่หนี
+        function moveButton() {
+            const noButton = document.getElementById('noButton');
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
+            
+            const maxX = containerRect.width - noButton.offsetWidth - 40;
+            const maxY = containerRect.height - noButton.offsetHeight - 40;
+            
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            
+            noButton.style.position = 'absolute';
+            noButton.style.left = newX + 'px';
+            noButton.style.top = newY + 'px';
+            noButton.style.transition = 'all 0.3s ease';
+        }
+
+        function sayYes() {
+            // เปลี่ยนเพลงเมื่อกดตกลง
+            if (musicPlaying) {
+                music.src = 'https://cdn.pixabay.com/download/audio/2022/05/16/audio_62d6530a12.mp3?filename=romantic-sax-144703.mp3';
+                music.play().catch(e => console.log('ไม่สามารถเล่นเพลงใหม่ได้:', e));
+            }
+            
+            document.body.innerHTML = `
+                <div class="celebration"></div>
+                <div class="container" style="text-align: center;">
+                    <h1 class="heart" style="font-size: 100px;">❤️</h1>
+                    <h1 class="success-message">เย้! เราดีใจมาก! 💕🥰</h1>
+                    <p style="font-size: 24px; margin-top: 20px; color: #ff6b89;">
+                        ขอบคุณที่ตอบรับความรักของเรานะ<br>
+                        เราจะดูแลเธอให้ดีที่สุดเลย!
+                    </p>
+                    <div style="margin-top: 40px;">
+                        <button class="yes" onclick="showLove()">แสดงความรัก ❤️</button>
+                    </div>
+                </div>
+                
+                <div class="music-controls">
+                    <button onclick="toggleMusic()" id="musicToggle">${musicPlaying ? '⏸️' : '▶️'}</button>
+                    <span id="musicStatus" style="margin-left: 10px; font-size: 14px; color: #ff4d6d;">${musicPlaying ? 'หยุดเพลง' : 'เปิดเพลง'}</span>
+                </div>
+                
+                <audio id="backgroundMusic" loop>
+                    <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_62d6530a12.mp3?filename=romantic-sax-144703.mp3" type="audio/mpeg">
+                </audio>
+            `;
+            
+            // ต้องเรียกตัวแปรใหม่หลังจากเปลี่ยน DOM
+            music = document.getElementById('backgroundMusic');
+            musicToggle = document.getElementById('musicToggle');
+            musicStatus = document.getElementById('musicStatus');
+            
+            if (musicPlaying) {
+                music.play().catch(e => console.log('ไม่สามารถเล่นเพลงได้:', e));
+            }
+            
+            createCelebration();
+        }
+        
+        function sayNo() {
+            // เปลี่ยนเพลงเมื่อกดไม่ตกลง
+            if (musicPlaying) {
+                music.src = 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_c26ce8bc4c.mp3?filename=sad-piano-theme-108977.mp3';
+                music.play().catch(e => console.log('ไม่สามารถเล่นเพลงใหม่ได้:', e));
+            }
+            
+            document.body.innerHTML = `
+                <div class="container">
+                    <h1 class="heart" style="color: #888;">💔</h1>
+                    <h1 class="friendly-message">ไม่เป็นไรนะ เราจะยังเป็นเพื่อนกัน 😊</h1>
+                    <p style="font-size: 20px; margin-top: 20px; color: #666;">
+                        แต่ถ้าเธอเปลี่ยนใจ เราก็ยังรอเธออยู่เสมอนะ
+                    </p>
+                    <div style="margin-top: 30px;">
+                        <button class="next" onclick="location.reload()">ลองอีกครั้ง</button>
+                    </div>
+                </div>
+                
+                <div class="music-controls">
+                    <button onclick="toggleMusic()" id="musicToggle">${musicPlaying ? '⏸️' : '▶️'}</button>
+                    <span id="musicStatus" style="margin-left: 10px; font-size: 14px; color: #ff4d6d;">${musicPlaying ? 'หยุดเพลง' : 'เปิดเพลง'}</span>
+                </div>
+                
+                <audio id="backgroundMusic" loop>
+                    <source src="https://www.youtube.com/watch?v=hDyHf1LblKY" type="audio/mpeg">
+                </audio>
+            `;
+            
+            // ต้องเรียกตัวแปรใหม่หลังจากเปลี่ยน DOM
+            music = document.getElementById('backgroundMusic');
+            musicToggle = document.getElementById('musicToggle');
+            musicStatus = document.getElementById('musicStatus');
+            
+            if (musicPlaying) {
+                music.play().catch(e => console.log('ไม่สามารถเล่นเพลงได้:', e));
+            }
+        }
+        
+        function createCelebration() {
+            const celebration = document.querySelector('.celebration');
+            const colors = ['#ff4d6d', '#ff8fa3', '#ffb3c1', '#ff77a9', '#ff2d55'];
+            const shapes = ['heart', 'circle', 'square'];
+            
+            for (let i = 0; i < 150; i++) {
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                const size = 5 + Math.random() * 15;
+                
+                if (shape === 'heart') {
+                    confetti.innerHTML = '❤️';
+                    confetti.style.fontSize = size + 'px';
+                    confetti.style.background = 'transparent';
+                } else {
+                    confetti.style.width = size + 'px';
+                    confetti.style.height = size + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    if (shape === 'circle') {
+                        confetti.style.borderRadius = '50%';
+                    }
+                }
+                
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (3 + Math.random() * 5) + 's';
+                confetti.style.animationDelay = (Math.random() * 5) + 's';
+                
+                celebration.appendChild(confetti);
+            }
+        }
+        
+        function showLove() {
+            const heartCount = 200;
+            
+            for (let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = ['❤️', '💕', '💓', '💗', '💖'][Math.floor(Math.random() * 5)];
+                    heart.style.position = 'fixed';
+                    heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = '100vh';
+                    heart.style.zIndex = '1000';
+                    heart.style.opacity = '0.8';
+                    heart.style.animation = `float ${5 + Math.random() * 10}s linear forwards`;
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(heart);
+                    }, 15000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
